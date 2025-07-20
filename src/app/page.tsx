@@ -6,6 +6,8 @@ import { useTasks } from '@/hooks/useTasks';
 import { TaskList } from '@/components/task-list';
 import { AddTaskModal } from '@/components/add-task-modal';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Plus, Target } from 'lucide-react';
 
 export default function Home() {
@@ -36,8 +38,8 @@ export default function Home() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">読み込み中...</p>
+          <Skeleton className="h-12 w-12 rounded-full mx-auto mb-4" />
+          <Skeleton className="h-4 w-24 mx-auto" />
         </div>
       </div>
     );
@@ -49,18 +51,17 @@ export default function Home() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-3">
-            <div className="p-2 bg-blue-600 rounded-lg">
-              <Target className="h-6 w-6 text-white" />
-            </div>
+            <Avatar>
+              <AvatarFallback>
+                <Target className="h-6 w-6" />
+              </AvatarFallback>
+            </Avatar>
             <div>
-              <h1 className="text-3xl font-bold text-gray-800">習慣トラッカー</h1>
-              <p className="text-gray-600">毎日の習慣を記録して、目標を達成しましょう</p>
+              <h1 className="text-3xl font-bold">習慣トラッカー</h1>
+              <p className="text-muted-foreground">毎日の習慣を記録して、目標を達成しましょう</p>
             </div>
           </div>
-          <Button
-            onClick={() => setIsModalOpen(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
-          >
+          <Button onClick={() => setIsModalOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             習慣を追加
           </Button>

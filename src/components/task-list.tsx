@@ -2,6 +2,7 @@
 
 import { Task } from '@/types';
 import { TaskCard } from './task-card';
+import { Alert, AlertDescription } from './ui/alert';
 
 interface TaskListProps {
   tasks: Task[];
@@ -13,18 +14,17 @@ interface TaskListProps {
 export function TaskList({ tasks, onToggle, onDelete, onEdit }: TaskListProps) {
   if (tasks.length === 0) {
     return (
-      <div className="text-center py-12">
-        <div className="text-gray-500 text-lg mb-2">習慣がまだありません</div>
-        <div className="text-gray-400 text-sm">
-          「＋」ボタンをクリックして最初の習慣を作成してください
-        </div>
-      </div>
+      <Alert>
+        <AlertDescription className="text-center">
+          習慣がまだありません。「＋」ボタンをクリックして最初の習慣を作成してください。
+        </AlertDescription>
+      </Alert>
     );
   }
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-semibold text-gray-800 mb-4">習慣一覧</h2>
+      <h2 className="text-xl font-semibold mb-4">習慣一覧</h2>
       <div className="grid gap-4">
         {tasks.map((task) => (
           <TaskCard
