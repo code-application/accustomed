@@ -2,7 +2,6 @@
 
 import { Task, TaskStats } from '@/types';
 import { calculateTaskStats } from '@/lib/taskUtils';
-import { ProgressChart } from './ui/progress-chart';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { TrendingUp, Target, CheckCircle, Calendar } from 'lucide-react';
 
@@ -64,14 +63,6 @@ export function Dashboard({ tasks }: DashboardProps) {
         ))}
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-gray-800">進捗グラフ</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ProgressChart tasks={tasks} />
-        </CardContent>
-      </Card>
     </div>
   );
 }

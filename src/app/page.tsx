@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { Task } from '@/types';
 import { useTasks } from '@/hooks/useTasks';
-import { Dashboard } from '@/components/dashboard';
 import { TaskList } from '@/components/task-list';
 import { AddTaskModal } from '@/components/add-task-modal';
 import { Button } from '@/components/ui/button';
@@ -67,10 +66,6 @@ export default function Home() {
           </Button>
         </div>
 
-        {/* Dashboard */}
-        <div className="mb-8">
-          <Dashboard tasks={tasks} />
-        </div>
 
         {/* Task List */}
         <div>
