@@ -31,7 +31,7 @@ export function AddTaskModal({ isOpen, onClose, onSubmit, editingTask }: AddTask
     editingTask?.duration.length || 1
   );
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent, shouldClose: boolean = true) => {
     e.preventDefault();
     
     if (!content.trim()) return;
@@ -54,7 +54,17 @@ export function AddTaskModal({ isOpen, onClose, onSubmit, editingTask }: AddTask
     };
 
     onSubmit(task);
-    handleClose();
+    
+    if (shouldClose || editingTask) {
+      handleClose();
+    } else {
+      // 連続作成時はフォームのみリセット
+      setContent('');
+      setFrequencyUnit('day');
+      setFrequencyCount(1);
+      setDurationUnit('month');
+      setDurationLength(1);
+    }
   };
 
   const handleClose = () => {
@@ -75,7 +85,7 @@ export function AddTaskModal({ isOpen, onClose, onSubmit, editingTask }: AddTask
           </DialogTitle>
         </DialogHeader>
         
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={(e) => handleSubmit(e)} className="space-y-4">
           <div>
             <Label htmlFor="content">習慣の内容</Label>
             <Input
@@ -147,8 +157,17 @@ export function AddTaskModal({ isOpen, onClose, onSubmit, editingTask }: AddTask
             <Button type="button" variant="outline" onClick={handleClose}>
               キャンセル
             </Button>
+            {!editingTask && (
+              <Button 
+                type="button" 
+                variant="secondary"
+                onClick={(e) => handleSubmit(e, false)}
+              >
+                保存して続けて作成
+              </Button>
+            )}
             <Button type="submit">
-              {editingTask ? '更新' : '追加'}
+              {editingTask ? '更新' : '保存して閉じる'}
             </Button>
           </DialogFooter>
         </form>
