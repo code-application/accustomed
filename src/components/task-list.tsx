@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { Task } from '@/types';
-import { TaskCard } from './task-card';
-import { Alert, AlertDescription } from './ui/alert';
+import { Task } from "@/types";
+import { TaskCard } from "./task-card";
+import { Alert, AlertDescription } from "./ui/alert";
 
 interface TaskListProps {
   tasks: Task[];
@@ -28,7 +28,7 @@ export function TaskList({ tasks, onToggle, onDelete, onEdit }: TaskListProps) {
       <div className="grid gap-4">
         {tasks.map((task) => (
           <TaskCard
-            key={task.id}
+            key={task.configuration.id}
             task={task}
             onToggle={onToggle}
             onDelete={onDelete}

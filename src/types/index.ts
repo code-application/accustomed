@@ -1,11 +1,37 @@
-export interface Task {
+/**
+ * タスク設定
+ * タスクの設定を管理するためのインターフェース
+ * タスクの共通の設定内容を管理する
+ */
+export interface TaskConfiguration {
   id: string;
   content: string;
-  status: TaskStatus;
   frequency: TaskFrequency;
   duration: TaskDuration;
   createdAt: Date;
-  completedDates: string[]; // YYYY-MM-DD format
+}
+
+/**
+ * タスクインスタンス
+ * タスクのインスタンスを管理するためのインターフェース
+ * タスクのインスタンスは、タスクの設定に基づいて作成される
+ */
+export interface TaskInstance {
+  id: string;
+  configurationId: string;
+  status: TaskStatus;
+  scheduledDate: Date;
+  completedDate?: Date;
+  createdAt: Date;
+}
+
+/**
+ * タスク
+ * タスクの設定とインスタンスを管理するためのインターフェース
+ */
+export interface Task {
+  configuration: TaskConfiguration;
+  instances: TaskInstance[];
 }
 
 export interface TaskFrequency {
@@ -19,9 +45,9 @@ export interface TaskDuration {
   length: number;
 }
 
-export type TaskStatus = 'not-started' | 'in-progress' | 'done';
-export type FrequencyUnit = 'day' | 'week' | 'month' | 'year';
-export type DurationUnit = 'day' | 'week' | 'month' | 'year';
+export type TaskStatus = "not-started" | "in-progress" | "done";
+export type FrequencyUnit = "day" | "week" | "month" | "year";
+export type DurationUnit = "day" | "week" | "month" | "year";
 
 export interface TaskStats {
   totalTasks: number;

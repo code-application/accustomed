@@ -1,39 +1,55 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Task } from '@/types';
-import { useTasks } from '@/hooks/useTasks';
-import { TaskList } from '@/components/task-list';
-import { AddTaskModal } from '@/components/add-task-modal';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Plus, Target } from 'lucide-react';
+import { useState } from "react";
+import { Task } from "@/types";
+import { useTasks } from "@/hooks/useTasks";
+import { TaskList } from "@/components/task-list";
+import { AddTaskModal } from "@/components/add-task-modal";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Plus, Target } from "lucide-react";
 
 export default function Home() {
-  const { tasks, isLoading, addTask, updateTask, deleteTask, toggleTask } = useTasks();
+  const { tasks, isLoading, addTask, updateTask, deleteTask, toggleTask } =
+    useTasks();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | undefined>();
 
+  /**
+   * タスクを追加する
+   * @param {Task} task - 追加するタスク
+   */
   const handleAddTask = (task: Task) => {
     if (editingTask) {
-      updateTask(task.id, task);
+      updateTask(task.configuration.id, task);
       setEditingTask(undefined);
     } else {
       addTask(task);
     }
   };
 
+  /**
+   * タスクを編集する
+   * @param {Task} task - 編集するタスク
+   */
   const handleEditTask = (task: Task) => {
     setEditingTask(task);
     setIsModalOpen(true);
   };
 
+  /**
+   * モーダルを閉じる
+   */
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingTask(undefined);
   };
 
+  /**
+   * 読み込み中の場合
+   * @returns {JSX.Element} 読み込み中の場合のコンポーネント
+   */
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -58,7 +74,9 @@ export default function Home() {
             </Avatar>
             <div>
               <h1 className="text-3xl font-bold">習慣トラッカー</h1>
-              <p className="text-muted-foreground">毎日の習慣を記録して、目標を達成しましょう</p>
+              <p className="text-muted-foreground">
+                毎日の習慣を記録して、目標を達成しましょう
+              </p>
             </div>
           </div>
           <Button onClick={() => setIsModalOpen(true)}>
@@ -66,7 +84,6 @@ export default function Home() {
             習慣を追加
           </Button>
         </div>
-
 
         {/* Task List */}
         <div>
