@@ -1,7 +1,7 @@
 "use client";
 
 import { Task } from "@/types";
-import { isTaskInstanceCompletedToday, isSameDate } from "@/lib/taskUtils";
+import { isSameDate } from "@/lib/taskUtils";
 import { calculateStreak } from "@/lib/dateUtils";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
@@ -52,9 +52,7 @@ export function TaskCard({ task, onToggle, onDelete, onEdit }: TaskCardProps) {
       ? "日"
       : task.configuration.frequency.unit === "week"
       ? "週"
-      : task.configuration.frequency.unit === "month"
-      ? "月"
-      : "年"
+      : "月" // 年は未使用。
   }ごと`;
 
   return (

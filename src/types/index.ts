@@ -46,8 +46,8 @@ export interface TaskDuration {
 }
 
 export type TaskStatus = "not-started" | "in-progress" | "done";
-export type FrequencyUnit = "day" | "week" | "month" | "year";
-export type DurationUnit = "day" | "week" | "month" | "year";
+export type FrequencyUnit = "day" | "week" | "month";
+export type DurationUnit = "day" | "week" | "month";
 
 export interface TaskStats {
   totalTasks: number;

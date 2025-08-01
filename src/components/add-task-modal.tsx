@@ -159,7 +159,6 @@ export function AddTaskModal({
                   <SelectItem value="day">日</SelectItem>
                   <SelectItem value="week">週</SelectItem>
                   <SelectItem value="month">月</SelectItem>
-                  <SelectItem value="year">年</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -191,7 +190,6 @@ export function AddTaskModal({
                   <SelectItem value="day">日</SelectItem>
                   <SelectItem value="week">週</SelectItem>
                   <SelectItem value="month">月</SelectItem>
-                  <SelectItem value="year">年</SelectItem>
                 </SelectContent>
               </Select>
             </div>
