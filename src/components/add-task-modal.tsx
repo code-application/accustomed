@@ -1,13 +1,25 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Task, FrequencyUnit, DurationUnit } from '@/types';
-import { generateTaskId } from '@/lib/taskUtils';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from './ui/dialog';
+import { useState } from "react";
+import { Task, TaskConfiguration, FrequencyUnit, DurationUnit } from "@/types";
+import { generateTaskConfigurationId } from "@/lib/taskUtils";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "./ui/dialog";
 
 interface AddTaskModalProps {
   isOpen: boolean;
@@ -15,63 +27,83 @@ interface AddTaskModalProps {
   onSubmit: (task: Task) => void;
   editingTask?: Task;
 }
-
-export function AddTaskModal({ isOpen, onClose, onSubmit, editingTask }: AddTaskModalProps) {
-  const [content, setContent] = useState(editingTask?.content || '');
+/*
+ * タスク追加モーダルコンポーネント
+ * @param {boolean} isOpen - モーダルが開いているかどうか
+ * @param {Function} onClose - モーダルを閉じる関数
+ * @param {Function} onSubmit - タスクを追加する関数
+ * @param {Task} editingTask - 編集するタスク
+ * @returns {JSX.Element} タスク追加モーダルコンポーネント
+ */
+export function AddTaskModal({
+  isOpen,
+  onClose,
+  onSubmit,
+  editingTask,
+}: AddTaskModalProps) {
+  const [content, setContent] = useState(
+    editingTask?.configuration.content || ""
+  );
   const [frequencyUnit, setFrequencyUnit] = useState<FrequencyUnit>(
-    editingTask?.frequency.unit || 'day'
+    editingTask?.configuration.frequency.unit || "day"
   );
   const [frequencyCount, setFrequencyCount] = useState(
-    editingTask?.frequency.count || 1
+    editingTask?.configuration.frequency.count || 1
   );
   const [durationUnit, setDurationUnit] = useState<DurationUnit>(
-    editingTask?.duration.unit || 'month'
+    editingTask?.configuration.duration.unit || "month"
   );
   const [durationLength, setDurationLength] = useState(
-    editingTask?.duration.length || 1
+    editingTask?.configuration.duration.length || 1
   );
 
   const handleSubmit = (e: React.FormEvent, shouldClose: boolean = true) => {
     e.preventDefault();
-    
+
     if (!content.trim()) return;
 
-    const task: Task = {
-      id: editingTask?.id || generateTaskId(),
+    const configuration: TaskConfiguration = {
+      id: editingTask?.configuration.id || generateTaskConfigurationId(),
       content: content.trim(),
-      status: editingTask?.status || 'not-started',
       frequency: {
         unit: frequencyUnit,
         count: frequencyCount,
       },
       duration: {
-        startedAt: editingTask?.duration.startedAt || new Date(),
+        startedAt: editingTask?.configuration.duration.startedAt || new Date(),
         unit: durationUnit,
         length: durationLength,
       },
-      createdAt: editingTask?.createdAt || new Date(),
-      completedDates: editingTask?.completedDates || [],
+      createdAt: editingTask?.configuration.createdAt || new Date(),
+    };
+
+    const task: Task = {
+      configuration,
+      instances: editingTask?.instances || [],
     };
 
     onSubmit(task);
-    
+
     if (shouldClose || editingTask) {
       handleClose();
     } else {
       // 連続作成時はフォームのみリセット
-      setContent('');
-      setFrequencyUnit('day');
+      setContent("");
+      setFrequencyUnit("day");
       setFrequencyCount(1);
-      setDurationUnit('month');
+      setDurationUnit("month");
       setDurationLength(1);
     }
   };
 
+  /**
+   * モーダルを閉じる
+   */
   const handleClose = () => {
-    setContent('');
-    setFrequencyUnit('day');
+    setContent("");
+    setFrequencyUnit("day");
     setFrequencyCount(1);
-    setDurationUnit('month');
+    setDurationUnit("month");
     setDurationLength(1);
     onClose();
   };
@@ -79,14 +111,16 @@ export function AddTaskModal({ isOpen, onClose, onSubmit, editingTask }: AddTask
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
+        {/* モーダルのタイトル */}
         <DialogHeader>
           <DialogTitle>
-            {editingTask ? '習慣を編集' : '新しい習慣を追加'}
+            {editingTask ? "習慣を編集" : "新しい習慣を追加"}
           </DialogTitle>
         </DialogHeader>
-        
+
         <form onSubmit={(e) => handleSubmit(e)} className="space-y-4">
           <div>
+            {/* 習慣の内容 */}
             <Label htmlFor="content">習慣の内容</Label>
             <Input
               id="content"
@@ -97,6 +131,7 @@ export function AddTaskModal({ isOpen, onClose, onSubmit, editingTask }: AddTask
             />
           </div>
 
+          {/* 頻度 */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="frequency-count">頻度</Label>
@@ -111,7 +146,12 @@ export function AddTaskModal({ isOpen, onClose, onSubmit, editingTask }: AddTask
             </div>
             <div>
               <Label htmlFor="frequency-unit">単位</Label>
-              <Select value={frequencyUnit} onValueChange={(value: FrequencyUnit) => setFrequencyUnit(value)}>
+              <Select
+                value={frequencyUnit}
+                onValueChange={(value: FrequencyUnit) =>
+                  setFrequencyUnit(value)
+                }
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -125,6 +165,7 @@ export function AddTaskModal({ isOpen, onClose, onSubmit, editingTask }: AddTask
             </div>
           </div>
 
+          {/* 期間 */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="duration-length">期間</Label>
@@ -139,7 +180,10 @@ export function AddTaskModal({ isOpen, onClose, onSubmit, editingTask }: AddTask
             </div>
             <div>
               <Label htmlFor="duration-unit">期間単位</Label>
-              <Select value={durationUnit} onValueChange={(value: DurationUnit) => setDurationUnit(value)}>
+              <Select
+                value={durationUnit}
+                onValueChange={(value: DurationUnit) => setDurationUnit(value)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -153,21 +197,25 @@ export function AddTaskModal({ isOpen, onClose, onSubmit, editingTask }: AddTask
             </div>
           </div>
 
+          {/* モーダルのフッター */}
           <DialogFooter>
+            {/* キャンセルボタン */}
             <Button type="button" variant="outline" onClick={handleClose}>
               キャンセル
             </Button>
+            {/* 保存して続けて作成ボタン */}
             {!editingTask && (
-              <Button 
-                type="button" 
+              <Button
+                type="button"
                 variant="secondary"
                 onClick={(e) => handleSubmit(e, false)}
               >
                 保存して続けて作成
               </Button>
             )}
+            {/* 保存して閉じるボタン */}
             <Button type="submit">
-              {editingTask ? '更新' : '保存して閉じる'}
+              {editingTask ? "更新" : "保存して閉じる"}
             </Button>
           </DialogFooter>
         </form>

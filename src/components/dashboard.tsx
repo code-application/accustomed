@@ -1,36 +1,40 @@
-'use client';
+"use client";
 
-import { Task, TaskStats } from '@/types';
-import { calculateTaskStats } from '@/lib/taskUtils';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Avatar, AvatarFallback } from './ui/avatar';
-import { TrendingUp, Target, CheckCircle, Calendar } from 'lucide-react';
+import { Task } from "@/types";
+import { calculateNewTaskStats } from "@/lib/taskUtils";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Avatar, AvatarFallback } from "./ui/avatar";
+import { TrendingUp, Target, CheckCircle, Calendar } from "lucide-react";
 
 interface DashboardProps {
   tasks: Task[];
 }
-
+/**
+ * ダッシュボードコンポーネント(未使用)
+ * @param {Task[]} tasks - タスクの一覧
+ * @returns {JSX.Element} ダッシュボードコンポーネント
+ */
 export function Dashboard({ tasks }: DashboardProps) {
-  const stats = calculateTaskStats(tasks);
+  const stats = calculateNewTaskStats(tasks);
 
   const statCards = [
     {
-      title: '今日の完了',
+      title: "今日の完了",
       value: `${stats.completedToday}/${stats.totalTasks}`,
       icon: CheckCircle,
     },
     {
-      title: '連続記録',
+      title: "連続記録",
       value: `${stats.currentStreak}日`,
       icon: TrendingUp,
     },
     {
-      title: '完了率',
+      title: "完了率",
       value: `${Math.round(stats.completionRate)}%`,
       icon: Target,
     },
     {
-      title: '総完了数',
+      title: "総完了数",
       value: stats.totalCompletions,
       icon: Calendar,
     },
@@ -57,7 +61,6 @@ export function Dashboard({ tasks }: DashboardProps) {
           </Card>
         ))}
       </div>
-
     </div>
   );
 }
