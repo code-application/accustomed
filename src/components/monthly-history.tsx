@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { Task } from "@/types";
 import { formatMonthlyHistoryData } from "@/lib/taskUtils";
-import { Check, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "./ui/button";
+import { DateGrid, DayData } from "./date-grid";
+import { getMonthName, isCurrentMonth } from "@/lib/dateUtils";
 
 interface MonthlyHistoryProps {
   task: Task;
@@ -29,12 +31,12 @@ export function MonthlyHistory({
   const month = currentDate.getMonth();
   const monthlyData = formatMonthlyHistoryData(task, year, month);
 
-  const weekDays = ["日", "月", "火", "水", "木", "金", "土"];
+  const weekDayLabels = ["日", "月", "火", "水", "木", "金", "土"];
 
   /**
    * 前月に移動する関数
    */
-  const goToPreviousMonth = () => {
+  const goToPreviousMonth = (): void => {
     const prevMonth = new Date(currentDate);
     prevMonth.setMonth(currentDate.getMonth() - 1);
     setCurrentDate(prevMonth);
@@ -43,7 +45,7 @@ export function MonthlyHistory({
   /**
    * 翌月に移動する関数
    */
-  const goToNextMonth = () => {
+  const goToNextMonth = (): void => {
     const nextMonth = new Date(currentDate);
     nextMonth.setMonth(currentDate.getMonth() + 1);
     setCurrentDate(nextMonth);
@@ -52,35 +54,16 @@ export function MonthlyHistory({
   /**
    * 今月に移動する関数
    */
-  const goToCurrentMonth = () => {
+  const goToCurrentMonth = (): void => {
     setCurrentDate(new Date());
   };
 
   /**
-   * 今月かどうかを判定する関数
-   * @returns 今月かどうか
-   */
-  const isCurrentMonth = () => {
-    const today = new Date();
-    return today.getFullYear() === year && today.getMonth() === month;
-  };
-
-  /**
-   * 月の名前を取得する関数
-   * @param year - 年
-   * @param month - 月
-   * @returns 月の名前
-   */
-  const getMonthName = (year: number, month: number) => {
-    const date = new Date(year, month, 1);
-    return date.toLocaleDateString("ja-JP", { year: "numeric", month: "long" });
-  };
-
-  /**
    * 日付をクリックしたときの処理
+   * タスクの完了状態を切り替える
    * @param dayData - 日付データ
    */
-  const handleDayClick = (dayData: any) => {
+  const handleDayClick = (dayData: DayData): void => {
     const today = new Date();
     if (
       dayData.isCurrentMonth &&
@@ -90,11 +73,41 @@ export function MonthlyHistory({
     }
   };
 
-  // 週ごとに日付をグループ化
-  const weeks = [];
-  for (let i = 0; i < monthlyData.days.length; i += 7) {
-    weeks.push(monthlyData.days.slice(i, i + 7));
-  }
+  /**
+   * 月別表示用の日付フォーマット関数
+   * @param date - 日付
+   * @returns フォーマットされた日付文字列
+   */
+  const formatMonthlyDate = (date: Date): string => {
+    return `${date.getDate()}日`;
+  };
+
+  /**
+   * 月別表示用のクリック可能判定関数
+   * @param dayData - 日付データ
+   * @returns クリック可能かどうか
+   */
+  const isMonthlyClickable = (dayData: DayData): boolean => {
+    return dayData.isCurrentMonth === true && dayData.isToday === true;
+  };
+
+  /**
+   * 月別表示用のスタイル関数
+   * @param dayData - 日付データ
+   * @returns スタイルクラス名
+   */
+  const getMonthlyDayStyle = (dayData: DayData): string => {
+    if (dayData.isCompleted) {
+      return "text-green-700";
+    }
+    if (dayData.isCurrentMonth) {
+      if (dayData.isToday) {
+        return "bg-blue-100 text-blue-600 hover:bg-blue-200";
+      }
+      return "text-gray-700 hover:bg-gray-50";
+    }
+    return "text-gray-400";
+  };
 
   return (
     <div className="space-y-4">
@@ -110,11 +123,12 @@ export function MonthlyHistory({
           先月
         </Button>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center">
           <span className="text-sm font-medium">
             {getMonthName(year, month)}
           </span>
-          {!isCurrentMonth() && (
+
+          {isCurrentMonth(year, month) && (
             <Button
               variant="ghost"
               size="sm"
@@ -149,68 +163,16 @@ export function MonthlyHistory({
         </Button>
       </div>
 
-      {/* カレンダーグリッド */}
-      <div className="border border-gray-200 rounded-sm overflow-hidden">
-        {/* 曜日ラベル */}
-        <div className="grid grid-cols-7 gap-0">
-          {weekDays.map((day, index) => (
-            <div
-              key={index}
-              className="text-center p-1 bg-gray-50 border-r border-gray-200 last:border-r-0"
-            >
-              <div className="text-xs text-gray-500 font-medium">{day}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* 週ごとの日付 */}
-        {weeks.map((week, weekIndex) => (
-          <div key={weekIndex} className="grid grid-cols-7 gap-0">
-            {week.map((dayData, dayIndex) => (
-              <div
-                key={dayIndex}
-                className={`
-                  text-center p-0.5 border-r border-gray-200 last:border-r-0 border-t border-gray-200 aspect-square
-                  ${dayData.isCompleted ? "bg-green-100 border-green-300" : ""}
-                `}
-              >
-                <button
-                  onClick={() => handleDayClick(dayData)}
-                  disabled={!dayData.isCurrentMonth || !dayData.isToday}
-                  className={`
-                    w-full h-full flex items-center justify-center text-xs font-medium
-                    transition-colors duration-200
-                    ${
-                      dayData.isCompleted
-                        ? "text-green-700"
-                        : dayData.isCurrentMonth
-                        ? dayData.isToday
-                          ? "bg-blue-500 text-white hover:bg-blue-600"
-                          : "text-gray-700 hover:bg-gray-50"
-                        : "text-gray-400"
-                    }
-                    ${
-                      !dayData.isCurrentMonth || !dayData.isToday
-                        ? "cursor-not-allowed"
-                        : "cursor-pointer"
-                    }
-                  `}
-                  title={dayData.date.toLocaleDateString("ja-JP")}
-                >
-                  {dayData.isCompleted ? (
-                    <div className="flex items-center space-x-0.5">
-                      <Check className="w-2 h-2 text-green-600" />
-                      <span className="text-xs">{dayData.date.getDate()}</span>
-                    </div>
-                  ) : (
-                    `${dayData.date.getDate()}`
-                  )}
-                </button>
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
+      {/* 月別カレンダー */}
+      <DateGrid
+        weekDayLabels={weekDayLabels}
+        days={monthlyData.days}
+        onDayClick={handleDayClick}
+        formatDate={formatMonthlyDate}
+        showCompletionIcon={true}
+        isClickable={isMonthlyClickable}
+        getDayStyle={getMonthlyDayStyle}
+      />
 
       {/* 月の統計 */}
       <div className="text-center text-sm text-gray-600">

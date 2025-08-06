@@ -109,3 +109,71 @@ export function getEndOfMonthExample(): string {
 
   return `${yearStr}/${monthStr}/${dayStr}`;
 }
+
+/**
+ * 月の日数を取得
+ * @param year 年
+ * @param month 月（0-11）
+ * @returns その月の日数
+ */
+export function getDaysInMonth(year: number, month: number): number {
+  return new Date(year, month + 1, 0).getDate();
+}
+
+/**
+ * 週の開始日（日曜日）を取得
+ * @param date 基準日
+ * @returns その週の日曜日の日付
+ */
+export function getWeekStart(date: Date): Date {
+  const weekStart = new Date(date);
+  const day = weekStart.getDay();
+  weekStart.setDate(weekStart.getDate() - day);
+  return weekStart;
+}
+
+/**
+ * 今週かどうかを判定する
+ */
+export const isCurrentWeek = (): boolean => {
+  const today = new Date();
+  const todayWeekStart = getWeekStart(today);
+  const currentWeekStart = getWeekStart(new Date());
+  return isSameDate(currentWeekStart, todayWeekStart);
+};
+
+/**
+ * 今月かどうかを判定する関数
+ * @param year - 年
+ * @param month - 月
+ * @returns 今月かどうか
+ */
+export function isCurrentMonth(year: number, month: number): boolean {
+  const today = new Date();
+  return today.getFullYear() === year && today.getMonth() === month;
+}
+
+/**
+ * 2つの日付が同じ日付かどうかを判定する関数
+ * @param d1 - 日付1
+ * @param d2 - 日付2
+ * @returns 同じ年月日かどうか
+ */
+export function isSameDate(d1: Date, d2: Date): boolean {
+  return (
+    d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate()
+  );
+}
+
+/**
+ * 月の名前を取得する関数
+ * @param year - 年
+ * @param month - 月
+ * @returns 月の名前
+ */
+export function getMonthName(year: number, month: number): string {
+  const date = new Date(year, month, 1);
+  return date.toLocaleDateString("ja-JP", { year: "numeric", month: "long" });
+}

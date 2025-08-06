@@ -35,7 +35,7 @@ interface TaskCardProps {
  * @param {Function} props.onEdit - タスクを編集する関数
  */
 export function TaskCard({ task, onToggle, onDelete, onEdit }: TaskCardProps) {
-  const [showHistory, setShowHistory] = useState(false);
+  const [showMonthlyCalendar, setShowMonthlyCalendar] = useState(false);
 
   const today = new Date();
   const todayInstance = task.instances.find((instance) =>
@@ -68,8 +68,7 @@ export function TaskCard({ task, onToggle, onDelete, onEdit }: TaskCardProps) {
     day: "2-digit",
   });
 
-  // TODO: 単位の解釈に誤りあり
-  const frequencyText = `${task.configuration.frequency.count}${
+  const frequencyText = `${
     task.configuration.frequency.unit === "day"
       ? "日"
       : task.configuration.frequency.unit === "week"
@@ -77,7 +76,7 @@ export function TaskCard({ task, onToggle, onDelete, onEdit }: TaskCardProps) {
       : task.configuration.frequency.unit === "month"
       ? "月"
       : "年"
-  }ごと`;
+  }${task.configuration.frequency.count}回`;
 
   return (
     <Card className={isCompleted ? "ring-2 ring-green-200 bg-green-50" : ""}>
@@ -115,7 +114,7 @@ export function TaskCard({ task, onToggle, onDelete, onEdit }: TaskCardProps) {
                 ${
                   isCompleted
                     ? "bg-green-500 hover:bg-green-600 text-white"
-                    : "border-blue-600 text-blue-700 hover:bg-blue-100"
+                    : "border-blue-600 bg-blue-600 text-white hover:bg-blue-700 hover:text-white"
                 }
               `}
             >
@@ -138,40 +137,37 @@ export function TaskCard({ task, onToggle, onDelete, onEdit }: TaskCardProps) {
 
         {/* 週間ビューまたは月別履歴 */}
         <div className="mt-4">
-          {!showHistory ? (
+          {!showMonthlyCalendar ? (
             <>
               <WeeklyProgress task={task} onToggle={onToggle} />
-              <div className="flex justify-between items-center mt-3">
-                <button
-                  onClick={() => setShowHistory(true)}
-                  className="text-blue-600 hover:text-blue-700 text-sm"
-                >
-                  実行履歴を見る
-                </button>
-                <div className="flex items-center space-x-2 text-sm text-gray-500">
-                  <span>残り{remainingDays}日！</span>
-                  <span>|</span>
-                  <span>{deadlineText}まで</span>
-                </div>
-              </div>
             </>
           ) : (
             <>
               <MonthlyHistory
                 task={task}
                 onToggle={onToggle}
-                onClose={() => setShowHistory(false)}
+                onClose={() => setShowMonthlyCalendar(false)}
               />
-              <div className="flex justify-between items-center mt-3">
-                <div></div>
-                <div className="flex items-center space-x-2 text-sm text-gray-500">
-                  <span>残り{remainingDays}日！</span>
-                  <span>|</span>
-                  <span>{deadlineText}まで</span>
-                </div>
-              </div>
             </>
           )}
+          {/* タスクカードのフッター */}
+          <div className="flex justify-between items-center mt-3">
+            {!showMonthlyCalendar ? (
+              <button
+                onClick={() => setShowMonthlyCalendar(true)}
+                className="text-blue-600 hover:text-blue-700 text-sm"
+              >
+                カレンダーを見る
+              </button>
+            ) : (
+              <div></div> // 月別履歴を表示しているときは何も表示しない
+            )}
+            <div className="flex items-center space-x-2 text-sm text-gray-500">
+              <span>残り{remainingDays}日！</span>
+              <span>|</span>
+              <span>{deadlineText}まで</span>
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>

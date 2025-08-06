@@ -1,9 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Task } from "@/types";
-import { formatWeeklyData, getWeekStart } from "@/lib/taskUtils";
-import { Check } from "lucide-react";
+import { formatWeeklyData } from "@/lib/taskUtils";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "./ui/button";
+import { DateGrid, DayData } from "./date-grid";
+import { getWeekStart, isCurrentWeek } from "@/lib/dateUtils";
 
 /**
  * 週の進捗を表示するコンポーネントのprops
@@ -26,6 +29,23 @@ export function WeeklyProgress({ task, onToggle }: WeeklyProgressProps) {
 
   const weeklyData = formatWeeklyData(task, currentWeekStart);
 
+  /**
+   * 今週の開始日の文字列
+   */
+  const currentWeekStartDateString = `${
+    currentWeekStart.getMonth() + 1
+  }/${currentWeekStart.getDate()}`;
+
+  /**
+   * 今週の終了日の文字列
+   */
+  const currentWeekEndDateString = `${
+    new Date(currentWeekStart.getTime() + 6 * 24 * 60 * 60 * 1000).getMonth() +
+    1
+  }/${new Date(
+    currentWeekStart.getTime() + 6 * 24 * 60 * 60 * 1000
+  ).getDate()}`;
+
   // デバッグ用：タスクの状態を確認
   console.log("WeeklyProgress - Task instances:", task.instances);
   console.log("WeeklyProgress - Weekly data:", weeklyData);
@@ -36,16 +56,50 @@ export function WeeklyProgress({ task, onToggle }: WeeklyProgressProps) {
     console.log("WeeklyProgress - Task updated:", task);
   }, [task]);
 
-  const weekDays = ["日", "月", "火", "水", "木", "金", "土"];
+  const weekDayLabels = ["日", "月", "火", "水", "木", "金", "土"];
 
   /**
    * 日付ボックスをクリックしたときの処理
+   * タスクの完了状態を切り替える
    * @param dayData - 日付データ
    */
-  const handleDayClick = (dayData: any) => {
+  const handleDayClick = (dayData: DayData): void => {
     if (dayData.isToday) {
       onToggle(task.configuration.id);
     }
+  };
+
+  /**
+   * 週別表示用の日付フォーマット関数
+   * @param date - 日付
+   * @returns フォーマットされた日付文字列
+   */
+  const formatWeeklyDate = (date: Date): string => {
+    return `${date.getMonth() + 1}/${date.getDate()}`;
+  };
+
+  /**
+   * 週別表示用のクリック可能判定関数
+   * @param dayData - 日付データ
+   * @returns クリック可能かどうか
+   */
+  const isWeeklyClickable = (dayData: DayData): boolean => {
+    return dayData.isToday === true;
+  };
+
+  /**
+   * 週別表示用のスタイル関数
+   * @param dayData - 日付データ
+   * @returns スタイルクラス名
+   */
+  const getWeeklyDayStyle = (dayData: DayData): string => {
+    if (dayData.isCompleted) {
+      return "text-green-700";
+    }
+    if (dayData.isToday) {
+      return "bg-blue-100 text-blue-600 hover:bg-blue-200";
+    }
+    return "text-gray-400";
   };
 
   /**
@@ -69,38 +123,25 @@ export function WeeklyProgress({ task, onToggle }: WeeklyProgressProps) {
     // 常に今週を表示しているため何もしない
   };
 
-  /**
-   * 今週かどうかを判定する
-   */
-  const isCurrentWeek = () => {
-    const today = new Date();
-    const todayWeekStart = getWeekStart(today);
-    return currentWeekStart.getTime() === todayWeekStart.getTime();
-  };
-
   return (
     <div className="space-y-3">
       {/* 週のナビゲーション */}
       <div className="flex items-center justify-between">
-        <button
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={goToPreviousWeek}
-          className="text-gray-500 hover:text-gray-700 text-sm"
+          className="text-gray-500 hover:text-gray-700"
         >
-          ＜先週
-        </button>
+          <ChevronLeft className="w-4 h-4 mr-1" />
+          先週
+        </Button>
 
         <div className="flex items-center space-x-2">
           <span className="text-sm font-medium">
-            {currentWeekStart.getMonth() + 1}/{currentWeekStart.getDate()} -{" "}
-            {new Date(
-              currentWeekStart.getTime() + 6 * 24 * 60 * 60 * 1000
-            ).getMonth() + 1}
-            /
-            {new Date(
-              currentWeekStart.getTime() + 6 * 24 * 60 * 60 * 1000
-            ).getDate()}
+            {currentWeekStartDateString} - {currentWeekEndDateString}
           </span>
-          {!isCurrentWeek() && (
+          {isCurrentWeek() && (
             <button
               onClick={goToCurrentWeek}
               className="text-blue-600 hover:text-blue-700 text-xs"
@@ -110,65 +151,27 @@ export function WeeklyProgress({ task, onToggle }: WeeklyProgressProps) {
           )}
         </div>
 
-        <button
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={goToNextWeek}
-          className="text-gray-500 hover:text-gray-700 text-sm"
+          className="text-gray-500 hover:text-gray-700"
         >
-          翌週＞
-        </button>
+          翌週
+          <ChevronRight className="w-4 h-4 ml-1" />
+        </Button>
       </div>
 
       {/* 週間グリッド */}
-      <div className="grid grid-cols-7 gap-0 border border-gray-200 rounded-sm overflow-hidden">
-        {/* 曜日ラベル */}
-        {weekDays.map((day, index) => (
-          <div
-            key={index}
-            className="text-center p-1 bg-gray-50 border-r border-gray-200 last:border-r-0"
-          >
-            <div className="text-xs text-gray-500">{day}</div>
-          </div>
-        ))}
-
-        {/* 日付ボックス */}
-        {weeklyData.days.map((dayData, index) => (
-          <div
-            key={index}
-            className={`
-              text-center p-1 border-r border-gray-200 last:border-r-0 border-t border-gray-200 aspect-square
-              ${dayData.isCompleted ? "bg-green-100 border-green-300" : ""}
-            `}
-          >
-            <button
-              onClick={() => handleDayClick(dayData)}
-              disabled={!dayData.isToday}
-              className={`
-                w-full h-full flex items-center justify-center text-xs font-medium
-                transition-colors duration-200
-                ${
-                  dayData.isCompleted
-                    ? "text-green-700"
-                    : dayData.isToday
-                    ? "bg-blue-50 text-blue-600 hover:bg-blue-100"
-                    : "text-gray-400"
-                }
-                ${!dayData.isToday ? "cursor-not-allowed" : "cursor-pointer"}
-              `}
-            >
-              {dayData.isCompleted ? (
-                <div className="flex items-center space-x-1">
-                  <Check className="w-3 h-3 text-green-600" />
-                  <span className="text-xs">
-                    {dayData.date.getMonth() + 1}/{dayData.date.getDate()}
-                  </span>
-                </div>
-              ) : (
-                `${dayData.date.getMonth() + 1}/${dayData.date.getDate()}`
-              )}
-            </button>
-          </div>
-        ))}
-      </div>
+      <DateGrid
+        weekDayLabels={weekDayLabels}
+        days={weeklyData.days}
+        onDayClick={handleDayClick}
+        formatDate={formatWeeklyDate}
+        showCompletionIcon={true}
+        isClickable={isWeeklyClickable}
+        getDayStyle={getWeeklyDayStyle}
+      />
 
       {/* 完了統計 */}
       <div className="text-center text-sm text-gray-600">

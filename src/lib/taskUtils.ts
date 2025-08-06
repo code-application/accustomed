@@ -8,7 +8,7 @@ import {
   MonthlyHistoryData,
   DayData,
 } from "@/types";
-import { isDateToday, calculateStreak } from "./dateUtils";
+import { isDateToday, calculateStreak, getDaysInMonth } from "./dateUtils";
 
 /**
  * タスク設定のIDを生成する
@@ -243,28 +243,6 @@ export function getMonthlyInstances(
 
     return scheduledDate >= startDate && scheduledDate <= endDate;
   });
-}
-
-/**
- * 月の日数を取得
- * @param year 年
- * @param month 月（0-11）
- * @returns その月の日数
- */
-export function getDaysInMonth(year: number, month: number): number {
-  return new Date(year, month + 1, 0).getDate();
-}
-
-/**
- * 週の開始日（日曜日）を取得
- * @param date 基準日
- * @returns その週の日曜日の日付
- */
-export function getWeekStart(date: Date): Date {
-  const weekStart = new Date(date);
-  const day = weekStart.getDay();
-  weekStart.setDate(weekStart.getDate() - day);
-  return weekStart;
 }
 
 /**
