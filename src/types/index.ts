@@ -40,14 +40,11 @@ export interface TaskFrequency {
 }
 
 export interface TaskDuration {
-  startedAt: Date;
-  unit: DurationUnit;
-  length: number;
+  deadline: Date; // 期限
 }
 
 export type TaskStatus = "not-started" | "in-progress" | "done";
 export type FrequencyUnit = "day" | "week" | "month";
-export type DurationUnit = "day" | "week" | "month";
 
 export interface TaskStats {
   totalTasks: number;
@@ -55,4 +52,31 @@ export interface TaskStats {
   currentStreak: number;
   totalCompletions: number;
   completionRate: number;
+}
+
+export interface WeeklyData {
+  startDate: Date;
+  days: WeeklyDayData[];
+  totalCompletions: number;
+}
+
+export interface WeeklyDayData {
+  date: Date;
+  isCompleted: boolean;
+  isToday: boolean;
+}
+
+export interface MonthlyHistoryData {
+  year: number;
+  month: number;
+  days: DayData[];
+  totalCompletions: number;
+}
+
+export interface DayData {
+  date: Date;
+  isCompleted: boolean;
+  completionCount?: number;
+  isCurrentMonth: boolean;
+  isToday: boolean;
 }
