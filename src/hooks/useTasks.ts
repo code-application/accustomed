@@ -74,15 +74,27 @@ export function useTasks() {
           task,
           todayInstance.id
         );
-        updateTask(taskId, updatedTask);
+        const newTasks = tasks.map((t) =>
+          t.configuration.id === taskId ? updatedTask : t
+        );
+        setTasks(newTasks);
+        saveTasks(newTasks);
       } else {
-        // 今日のインスタンスが存在しない場合は新しく作成
-        const newInstance = createTaskInstance(task.configuration.id, today);
+        // 今日のインスタンスが存在しない場合は新しく作成して完了状態にする
+        const newInstance = {
+          ...createTaskInstance(task.configuration.id, today),
+          status: "done" as const,
+          completedDate: new Date(),
+        };
         const updatedTask = {
           ...task,
           instances: [...task.instances, newInstance],
         };
-        updateTask(taskId, updatedTask);
+        const newTasks = tasks.map((t) =>
+          t.configuration.id === taskId ? updatedTask : t
+        );
+        setTasks(newTasks);
+        saveTasks(newTasks);
       }
     }
   };

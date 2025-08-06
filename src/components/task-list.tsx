@@ -4,6 +4,14 @@ import { Task } from "@/types";
 import { TaskCard } from "./task-card";
 import { Alert, AlertDescription } from "./ui/alert";
 
+/**
+ * タスク一覧コンポーネントのプロパティ
+ * @interface TaskListProps
+ * @property {Task[]} tasks - タスクの配列
+ * @property {Function} onToggle - タスクの完了状態を切り替える関数
+ * @property {Function} onDelete - タスクを削除する関数
+ * @property {Function} onEdit - タスクを編集する関数
+ */
 interface TaskListProps {
   tasks: Task[];
   onToggle: (taskId: string) => void;
@@ -11,6 +19,14 @@ interface TaskListProps {
   onEdit: (task: Task) => void;
 }
 
+/**
+ * タスク一覧コンポーネント
+ * @param {TaskListProps} props - タスク一覧のプロパティ
+ * @param {Task[]} props.tasks - タスクの配列
+ * @param {Function} props.onToggle - タスクの完了状態を切り替える関数
+ * @param {Function} props.onDelete - タスクを削除する関数
+ * @param {Function} props.onEdit - タスクを編集する関数
+ */
 export function TaskList({ tasks, onToggle, onDelete, onEdit }: TaskListProps) {
   if (tasks.length === 0) {
     return (

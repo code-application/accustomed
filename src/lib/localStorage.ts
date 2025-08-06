@@ -29,6 +29,7 @@ export function loadTasks(): Task[] {
             createdAt: new Date(task.configuration.createdAt),
             duration: {
               ...task.configuration.duration,
+              deadline: new Date(task.configuration.duration.deadline),
               startedAt: new Date(task.configuration.duration.startedAt),
             },
           },
