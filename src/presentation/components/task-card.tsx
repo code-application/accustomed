@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Task } from "@/domain/Task";
-import { isSameDate, calculateRemainingDays } from "@/domain/TaskDomainService";
-import { calculateStreak } from "@/domain/DateDomainService";
+import { Task } from "@/domain/task";
+import {
+  isSameDate,
+  calculateRemainingDays,
+} from "@/domain/task-domain-service";
+import { calculateStreak } from "@/domain/date-domain-service";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";

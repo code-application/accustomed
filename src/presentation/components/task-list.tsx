@@ -1,6 +1,6 @@
 "use client";
 
-import { Task } from "@/domain/Task";
+import { Task } from "@/domain/task";
 import { TaskCard } from "./task-card";
 import { Alert, AlertDescription } from "../ui/alert";
 

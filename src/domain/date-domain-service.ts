@@ -1,9 +1,5 @@
-import {
-  parseISO,
-  differenceInDays,
-  startOfDay,
-} from "date-fns";
-import { formatDate } from "../shared/DateUtils";
+import { parseISO, differenceInDays, startOfDay } from "date-fns";
+import { formatDate } from "../shared/date-utils";
 
 /**
  * 連続日数を計算する関数

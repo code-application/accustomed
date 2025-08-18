@@ -1,4 +1,4 @@
-import { Task } from "@/domain/Task";
+import { Task } from "@/domain/task";
 
 const STORAGE_KEY = "habit-tracker-tasks";
 

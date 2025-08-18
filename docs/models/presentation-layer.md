@@ -2,7 +2,7 @@
 
 ## 概要
 
-Reactコンポーネントとプレゼンテーション層の構造を示すクラス図です。
+React コンポーネントとプレゼンテーション層の構造を示すクラス図です。
 
 ## メインコンポーネント階層
 
@@ -116,7 +116,7 @@ classDiagram
     DateGrid ..> DayData : renders
 ```
 
-## Propsインターフェース
+## Props インターフェース
 
 ```mermaid
 classDiagram
@@ -177,7 +177,7 @@ classDiagram
     Dashboard ..|> DashboardProps : implements
 ```
 
-## Reactフックとの連携
+## React フックとの連携
 
 ```mermaid
 classDiagram
@@ -225,12 +225,16 @@ classDiagram
         +handleMonthChange(direction: string) void
     }
 
+    class ReactUseState {
+        +useState(initialValue: any) [value, setValue]
+    }
+
     %% フック使用関係
     PageComponent --> useTasksHook : uses
     PageComponent --> useToastHook : uses
-    TaskCard --> "React.useState" : uses
-    AddTaskModal --> "React.useState" : uses (multiple)
-    MonthlyHistory --> "React.useState" : uses
+    TaskCard --> ReactUseState : uses
+    AddTaskModal --> ReactUseState : uses (multiple)
+    MonthlyHistory --> ReactUseState : uses
 ```
 
 ## イベントハンドリングフロー
@@ -260,7 +264,7 @@ sequenceDiagram
 
 | コンポーネント | 実装ファイル                          | 主要機能                     | 状態管理               |
 | -------------- | ------------------------------------- | ---------------------------- | ---------------------- |
-| PageComponent  | `/src/app/page.tsx`                   | アプリのルートコンポーネント | useTasksフック         |
+| PageComponent  | `/src/app/page.tsx`                   | アプリのルートコンポーネント | useTasks フック        |
 | TaskList       | `/src/components/task-list.tsx`       | タスクリスト表示             | なし（props only）     |
 | TaskCard       | `/src/components/task-card.tsx`       | 個別タスク表示・操作         | showMonthlyCalendar    |
 | AddTaskModal   | `/src/components/add-task-modal.tsx`  | タスク追加・編集フォーム     | フォーム状態           |
@@ -272,7 +276,7 @@ sequenceDiagram
 ## 設計上の特徴
 
 - **単一責任の原則**: 各コンポーネントは明確な役割を持つ
-- **Propsによる依存性注入**: イベントハンドラーはpropsとして注入
-- **状態の上昇**: 共有状態はuseTasksフックで一元管理
-- **コンポーネントの再利用性**: DateGridは週間・月間表示で共用
-- **条件付きレンダリング**: TaskCard内でWeeklyProgress/MonthlyHistoryを切り替え
+- **Props による依存性注入**: イベントハンドラーは props として注入
+- **状態の上昇**: 共有状態は useTasks フックで一元管理
+- **コンポーネントの再利用性**: DateGrid は週間・月間表示で共用
+- **条件付きレンダリング**: TaskCard 内で WeeklyProgress/MonthlyHistory を切り替え

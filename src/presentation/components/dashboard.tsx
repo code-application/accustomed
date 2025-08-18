@@ -1,7 +1,7 @@
 "use client";
 
-import { Task } from "@/domain/Task";
-import { calculateNewTaskStats } from "@/domain/TaskDomainService";
+import { Task } from "@/domain/task";
+import { calculateNewTaskStats } from "@/domain/task-domain-service";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { TrendingUp, Target, CheckCircle, Calendar } from "lucide-react";

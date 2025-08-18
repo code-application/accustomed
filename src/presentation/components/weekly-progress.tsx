@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { Task } from "@/domain/Task";
-import { formatWeeklyData } from "@/domain/TaskDomainService";
+import { Task } from "@/domain/task";
+import { formatWeeklyData } from "@/domain/task-domain-service";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "../ui/button";
 import { DateGrid, DayData } from "./date-grid";
-import { getWeekStart, isCurrentWeek } from "@/shared/DateUtils";
+import { getWeekStart, isCurrentWeek } from "@/shared/date-utils";
 
 /**
  * 週の進捗を表示するコンポーネントのprops

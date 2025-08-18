@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Task } from "@/domain/Task";
-import { loadTasks, saveTasks } from "@/infrastructure/LocalStorage";
+import { loadTasks, saveTasks } from "@/infrastructure/local-storage";
 import {
   createTaskInstance,
   toggleTaskInstanceCompletionById,
   isSameDate,
-} from "@/domain/TaskDomainService";
+} from "@/domain/task-domain-service";
+import { Task } from "@/domain/task";
 
 /**
  * タスクを管理するフック

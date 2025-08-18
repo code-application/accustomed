@@ -7,9 +7,9 @@ import {
   WeeklyDayData,
   MonthlyHistoryData,
   DayData,
-} from "./Task";
-import { isDateToday, getDaysInMonth } from "@/shared/DateUtils";
-import { calculateStreak } from "./DateDomainService";
+} from "./task";
+import { isDateToday, getDaysInMonth } from "@/shared/date-utils";
+import { calculateStreak } from "./date-domain-service";
 
 /**
  * タスク設定のIDを生成する
