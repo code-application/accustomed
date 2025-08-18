@@ -168,27 +168,19 @@ flowchart TD
     end
 ```
 
-## 実装ファイル対応表
-
-| 関数群                | 実装ファイル               | 主要関数                                            | 行数  |
-| --------------------- | -------------------------- | --------------------------------------------------- | ----- |
-| LocalStorageFunctions | `/src/lib/localStorage.ts` | saveTasks, loadTasks, clearTasks                    | 1-62  |
-| DateUtilityFunctions  | `/src/lib/dateUtils.ts`    | formatDate, isDateToday, calculateStreak, etc       | 1-180 |
-| TaskUtilityFunctions  | `/src/lib/taskUtils.ts`    | generateTaskConfigurationId, generateTaskInstanceId | 17-29 |
-
 ## 設計上の注意点
 
 ### ブラウザ環境の考慮
 
-- **SSR対応**: `typeof window !== "undefined"` チェックでサーバーサイドレンダリングに対応
-- **localStorage可用性**: ブラウザ環境でのみlocalStorageを使用
+- **SSR 対応**: `typeof window !== "undefined"` チェックでサーバーサイドレンダリングに対応
+- **localStorage 可用性**: ブラウザ環境でのみ localStorage を使用
 
 ### データ整合性の保証
 
-- **Date復元処理**: JSONシリアライゼーション時にDateオブジェクトが文字列になるため、復元時に明示的にDateオブジェクトに変換
+- **Date 復元処理**: JSON シリアライゼーション時に Date オブジェクトが文字列になるため、復元時に明示的に Date オブジェクトに変換
 - **エラーハンドリング**: 不正なデータが保存されていてもアプリケーションが停止しないよう、フォールバック値（空配列）を提供
 
 ### パフォーマンス考慮
 
-- **同期処理**: localStorageは同期APIのため、大量データでのブロッキングに注意
-- **メモリ効率**: 不要なオブジェクトコピーを避けたDate復元処理
+- **同期処理**: localStorage は同期 API のため、大量データでのブロッキングに注意
+- **メモリ効率**: 不要なオブジェクトコピーを避けた Date 復元処理

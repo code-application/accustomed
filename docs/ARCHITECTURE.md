@@ -2,106 +2,112 @@
 
 ## 概要
 
-このドキュメントでは、accustomedプロジェクトにおけるレイヤードアーキテクチャの設計について説明します。クリーンアーキテクチャの原則に基づき、責務を明確に分離し、保守性と拡張性を向上させることを目的としています。
+このドキュメントでは、accustomed プロジェクトにおけるレイヤードアーキテクチャの設計について説明します。クリーンアーキテクチャの原則に基づき、責務を明確に分離し、保守性と拡張性を向上させることを目的としています。
 
 ## レイヤー構造
 
 ```txt
 src/
-├── presentation/           # プレゼンテーション層（UI層）
-│   ├── components/         # Reactコンポーネント
-│   ├── hooks/             # UIロジック用フック
-│   └── pages/             # ページコンポーネント（App Router対応）
+├── app/                   # Next.js App Router
+│   ├── page.tsx           # メインページ
+│   ├── layout.tsx         # ルートレイアウト
+│   └── globals.css        # グローバルスタイル
 │
-├── application/           # アプリケーション層（ユースケース層）
-│   ├── usecases/          # ユースケース実装
-│   │   ├── task/          # タスク関連ユースケース
-│   │   │   ├── CreateTaskUseCase.ts
-│   │   │   ├── UpdateTaskUseCase.ts
-│   │   │   ├── DeleteTaskUseCase.ts
-│   │   │   ├── ToggleTaskUseCase.ts
-│   │   │   └── GetTaskStatsUseCase.ts
-│   │   └── history/       # 履歴関連ユースケース
-│   │       ├── GetMonthlyHistoryUseCase.ts
-│   │       └── GetWeeklyProgressUseCase.ts
-│   └── services/          # アプリケーションサービス
-│       ├── TaskService.ts
-│       └── HistoryService.ts
+├── presentation/          # プレゼンテーション層（UI層）
+│   ├── components/        # Reactコンポーネント
+│   │   ├── task-list.tsx
+│   │   ├── task-card.tsx
+│   │   ├── add-task-modal.tsx
+│   │   ├── weekly-progress.tsx
+│   │   ├── monthly-history.tsx
+│   │   ├── date-grid.tsx
+│   │   └── dashboard.tsx
+│   ├── hooks/            # UIロジック用フック
+│   │   ├── useTasks.ts
+│   │   └── use-toast.ts
+│   ├── ui/               # shadcn/uiコンポーネント
+│   │   ├── button.tsx
+│   │   ├── card.tsx
+│   │   ├── dialog.tsx
+│   │   ├── input.tsx
+│   │   ├── select.tsx
+│   │   └── ... (その他のUIコンポーネント)
+│   └── pages/            # ページコンポーネント（予備）
 │
-├── domain/                # ドメイン層
-│   ├── entities/          # エンティティ
-│   │   ├── Task.ts
-│   │   ├── TaskConfiguration.ts
-│   │   ├── TaskInstance.ts
-│   │   └── TaskStats.ts
-│   ├── valueObjects/      # 値オブジェクト
-│   │   ├── TaskFrequency.ts
-│   │   ├── TaskDuration.ts
-│   │   └── TaskStatus.ts
-│   ├── repositories/      # リポジトリインターフェース
-│   │   └── TaskRepository.ts
-│   └── services/          # ドメインサービス
-│       ├── TaskDomainService.ts
-│       └── DateService.ts
+├── application/          # アプリケーション層（ユースケース層）
+│   └── task-application-service.ts  # タスク関連アプリケーションサービス
 │
-├── infrastructure/        # インフラストラクチャ層
-│   ├── repositories/      # リポジトリ実装
-│   │   └── LocalStorageTaskRepository.ts
-│   ├── storage/          # ストレージ関連
-│   │   └── localStorage.ts
-│   └── utils/            # インフラ用ユーティリティ
-│       └── dateUtils.ts
+├── domain/               # ドメイン層
+│   ├── task.ts           # タスクエンティティ
+│   ├── task-domain-service.ts      # タスクドメインサービス
+│   ├── date-domain-service.ts      # 日付ドメインサービス
+│   └── task-repository.ts          # タスクリポジトリインターフェース
 │
-└── shared/               # 共有層
-    ├── types/            # 共有型定義
-    │   └── index.ts
-    ├── constants/        # 定数
-    │   └── taskConstants.ts
-    └── utils/            # 共有ユーティリティ
-        └── utils.ts
+├── infrastructure/       # インフラストラクチャ層
+│   ├── local-storage.ts              # ローカルストレージ実装
+│   └── local-storage-task-repository.ts  # タスクリポジトリ実装
+│
+└── shared/              # 共有層
+    ├── common-types.ts   # 共有型定義
+    ├── date-utils.ts     # 日付ユーティリティ
+    └── utils.ts          # 汎用ユーティリティ
 ```
 
 ## 各層の責務
 
-### 1. Domain層（ドメイン層）
+### 1. Domain 層（ドメイン層）
 
 **責務**: ビジネスルールとドメインロジックの実装
 
-- **エンティティ**: Task, TaskConfiguration, TaskInstance等のビジネスオブジェクト
-- **値オブジェクト**: TaskFrequency, TaskDuration等の値表現
-- **ドメインサービス**: 複数エンティティにまたがるビジネスロジック
-- **リポジトリインターフェース**: データアクセスの抽象化
+- **エンティティ**: `Task` - タスクのビジネスオブジェクト
+- **ドメインサービス**:
+  - `TaskDomainService` - タスク関連のビジネスロジック
+  - `DateDomainService` - 日付関連のビジネスロジック
+- **リポジトリインターフェース**: `TaskRepository` - データアクセスの抽象化
 
-### 2. Application層（ユースケース層）
+### 2. Application 層（ユースケース層）
 
 **責務**: ビジネスプロセスの組み合わせとフロー制御
 
-- **ユースケース**: 具体的なビジネス機能（タスク作成、更新、削除等）
-- **アプリケーションサービス**: 複数ユースケースの調整
+- **アプリケーションサービス**: `TaskApplicationService` - タスク関連のユースケース統合
 
-### 3. Presentation層（プレゼンテーション層）
+### 3. Presentation 層（プレゼンテーション層）
 
-**責務**: UIとユーザーインタラクション
+**責務**: UI とユーザーインタラクション
 
-- **コンポーネント**: Reactコンポーネント
-- **フック**: UI状態管理とユースケース呼び出し
+- **コンポーネント**:
+  - フィーチャーコンポーネント（`TaskList`, `TaskCard`, `AddTaskModal`等）
+  - 進捗表示コンポーネント（`WeeklyProgress`, `MonthlyHistory`, `DateGrid`）
+- **フック**:
+  - `useTasks` - タスクデータの状態管理
+  - `useToast` - 通知メッセージの管理
+- **UI コンポーネント**: shadcn/ui ベースの再利用可能な UI エレメント
 
-### 4. Infrastructure層（インフラストラクチャ層）
+### 4. Infrastructure 層（インフラストラクチャ層）
 
-**責務**: 外部システムとの連携（DB、API、ローカルストレージ等）
+**責務**: 外部システムとの連携（ローカルストレージ等）
 
-- **リポジトリ実装**: ドメインリポジトリの具体実装
-- **ストレージ**: データ永続化の実装
+- **リポジトリ実装**: `LocalStorageTaskRepository` - タスクリポジトリのローカルストレージ実装
+- **ストレージ**: `LocalStorage` - ローカルストレージの抽象化
 
-### 5. Shared層（共有層）
+### 5. Shared 層（共有層）
 
 **責務**: 技術的な共通要素のみを提供（ビジネスロジックは含まない）
 
-- **型定義**: TypeScript型（プリミティブ型のエイリアス、共通インターフェース等）
-- **定数**: 技術的定数（設定値、列挙値等）
-- **ユーティリティ**: 純粋関数のみ（日付操作、文字列処理等）
+- **型定義**: `CommonTypes` - 共有型定義
+- **ユーティリティ**:
+  - `DateUtils` - 日付操作の純粋関数
+  - `Utils` - 汎用ユーティリティ関数
 
-**重要**: Shared層にはドメイン固有のロジックやビジネスルールを含めてはいけない
+**重要**: Shared 層にはドメイン固有のロジックやビジネスルールを含めてはいけない
+
+### 6. App 層（Next.js App Router）
+
+**責務**: Next.js App Router の設定とルーティング
+
+- **ページ**: `page.tsx` - メインページコンポーネント
+- **レイアウト**: `layout.tsx` - ルートレイアウト
+- **スタイル**: `globals.css` - グローバルスタイル
 
 ## 依存関係
 
@@ -109,13 +115,14 @@ src/
 
 - **内側の層は外側の層に依存しない**
 - **外側の層は内側の層に依存できる**
-- **依存関係の逆転**: インターフェースを使用してDomain層がInfrastructure層に依存しないようにする
+- **依存関係の逆転**: インターフェースを使用して Domain 層が Infrastructure 層に依存しないようにする
 
 ### 依存関係図
 
 ```mermaid
 graph TD
-    P[Presentation] --> A[Application]
+    APP[App Router] --> P[Presentation]
+    P --> A[Application]
     A --> D[Domain]
     I[Infrastructure] --> D
     P --> S[Shared]
@@ -127,6 +134,7 @@ graph TD
     style P fill:#99ff99
     style I fill:#ffcc99
     style S fill:#e6e6e6
+    style APP fill:#ffb366
 ```
 
 ### レイヤー間のデータフロー
@@ -156,17 +164,17 @@ sequenceDiagram
 ## 注意点
 
 - 過度な抽象化を避け、現在の要件に適したレベルでの実装を心がける
-- TypeScriptの型システムを活用して、コンパイル時に依存関係の違反を検出できるようにする
+- TypeScript の型システムを活用して、コンパイル時に依存関係の違反を検出できるようにする
 - 各層の境界を明確にし、適切なインターフェースを通じてのみ通信する
 
-### Shared層の設計原則
+### Shared 層の設計原則
 
 **含めるべきもの**:
 
 - プリミティブ型のエイリアス（`type UserId = string`等）
-- 技術的な設定定数（`MAX_RETRY_COUNT = 3`等）  
+- 技術的な設定定数（`MAX_RETRY_COUNT = 3`等）
 - 純粋関数のユーティリティ（`formatDate()`, `isValidEmail()`等）
-- 共通のTypeScript型定義（APIレスポンス型等）
+- 共通の TypeScript 型定義（API レスポンス型等）
 
 **含めるべきでないもの**:
 

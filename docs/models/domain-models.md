@@ -110,26 +110,9 @@ classDiagram
     MonthlyHistoryData "1" *-- "28..42" DayData : contains
 ```
 
-## 実装ファイル対応表
-
-| クラス/インターフェース | 実装ファイル          | 行数  |
-| ----------------------- | --------------------- | ----- |
-| TaskConfiguration       | `/src/types/index.ts` | 6-12  |
-| TaskInstance            | `/src/types/index.ts` | 19-26 |
-| Task                    | `/src/types/index.ts` | 32-35 |
-| TaskFrequency           | `/src/types/index.ts` | 37-40 |
-| TaskDuration            | `/src/types/index.ts` | 42-44 |
-| TaskStatus              | `/src/types/index.ts` | 46    |
-| FrequencyUnit           | `/src/types/index.ts` | 47    |
-| TaskStats               | `/src/types/index.ts` | 49-55 |
-| WeeklyData              | `/src/types/index.ts` | 57-61 |
-| WeeklyDayData           | `/src/types/index.ts` | 63-67 |
-| MonthlyHistoryData      | `/src/types/index.ts` | 69-74 |
-| DayData                 | `/src/types/index.ts` | 76-82 |
-
 ## 設計上の注意点
 
-- **Task**は集約ルートとして、TaskConfigurationとTaskInstance[]を管理
+- **Task**は集約ルートとして、TaskConfiguration と TaskInstance[]を管理
 - **TaskInstance**は特定の日付に対するタスクの実行状況を表現
 - **TaskConfiguration**はタスクの設定情報を不変オブジェクトとして管理
 - 値オブジェクトは不変性を保ち、ビジネスルールを内包

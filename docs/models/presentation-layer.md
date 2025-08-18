@@ -260,19 +260,6 @@ sequenceDiagram
     TC-->>UI: UI更新表示
 ```
 
-## 実装ファイル対応表
-
-| コンポーネント | 実装ファイル                          | 主要機能                     | 状態管理               |
-| -------------- | ------------------------------------- | ---------------------------- | ---------------------- |
-| PageComponent  | `/src/app/page.tsx`                   | アプリのルートコンポーネント | useTasks フック        |
-| TaskList       | `/src/components/task-list.tsx`       | タスクリスト表示             | なし（props only）     |
-| TaskCard       | `/src/components/task-card.tsx`       | 個別タスク表示・操作         | showMonthlyCalendar    |
-| AddTaskModal   | `/src/components/add-task-modal.tsx`  | タスク追加・編集フォーム     | フォーム状態           |
-| WeeklyProgress | `/src/components/weekly-progress.tsx` | 週間進捗表示                 | なし（props only）     |
-| MonthlyHistory | `/src/components/monthly-history.tsx` | 月間履歴表示                 | currentDate            |
-| DateGrid       | `/src/components/date-grid.tsx`       | 汎用日付グリッド             | なし（pure component） |
-| Dashboard      | `/src/components/dashboard.tsx`       | 統計ダッシュボード           | なし（未使用）         |
-
 ## 設計上の特徴
 
 - **単一責任の原則**: 各コンポーネントは明確な役割を持つ
