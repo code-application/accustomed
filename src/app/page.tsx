@@ -1,14 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Task } from "@/types";
-import { useTasks } from "@/hooks/useTasks";
-import { TaskList } from "@/components/task-list";
-import { AddTaskModal } from "@/components/add-task-modal";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+
+import { useTasks } from "@/presentation/hooks/useTasks";
+import { TaskList } from "@/presentation/components/task-list";
+import { AddTaskModal } from "@/presentation/components/add-task-modal";
+import { Button } from "@/presentation/ui/button";
+import { Skeleton } from "@/presentation/ui/skeleton";
+import { Avatar, AvatarFallback } from "@/presentation/ui/avatar";
 import { Plus, Target } from "lucide-react";
+import { Task } from "@/domain/task";
 
 export default function Home() {
   const { tasks, isLoading, addTask, updateTask, deleteTask, toggleTask } =
