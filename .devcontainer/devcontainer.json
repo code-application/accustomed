@@ -1,0 +1,65 @@
+{
+  "name": "accustomed-nextjs-node20-min",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "NODE_VERSION": "20",
+      // ネイティブ拡張をビルドする可能性がある場合のみ true に
+      "INSTALL_BUILD_TOOLS": "false"
+    }
+  },
+
+  // Node公式イメージの 'node' ユーザーを使用（非root）
+  "remoteUser": "node",
+
+  // ホストのプロジェクトを /workspaces にマウント
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/${localWorkspaceFolderBasename},type=bind,consistency=cached",
+
+  // npm キャッシュをボリュームで永続化（速度向上・軽量化に効く）
+  "mounts": [
+    "type=volume,source=devcontainer-npm-cache,target=/home/node/.npm"
+  ],
+
+  // 初回作成後に最小限のセットアップ
+  "postCreateCommand": "bash -lc 'corepack enable && node -v && npm -v && (pnpm -v || true) && if [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile; elif [ -f package-lock.json ]; then npm ci; elif [ -f yarn.lock ]; then yarn install --frozen-lockfile; fi'",
+
+  // Next.js dev サーバのポート
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": { "label": "Next.js" }
+  },
+
+  // 軽量・必須のみ（チーム共有）。個人の好みは Profiles で。
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss"
+      ],
+      "settings": {
+        // プロジェクトのTSを使う
+        "typescript.tsdk": "node_modules/typescript/lib",
+        // ESLint (flat config 前提でも自動判定)
+        "eslint.useFlatConfig": true,
+        "eslint.workingDirectories": [{ "mode": "auto" }],
+        // 保存時整形
+        "editor.formatOnSave": true,
+        "files.eol": "\n"
+      }
+    }
+  },
+
+  // コンテナのPID1にtini相当を入れる（Zombie対策）
+  "runArgs": ["--init"],
+
+  // 余計な再ビルドを避ける
+  "shutdownAction": "stopContainer",
+
+  // 便利な環境変数（任意）
+  "containerEnv": {
+    "NEXT_TELEMETRY_DISABLED": "1",
+    "NODE_ENV": "development"
+  }
+}
