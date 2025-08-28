@@ -1,7 +1,7 @@
 ---
 name: ユーザーストーリー
 about: 新機能や改善のためのユーザーストーリーを作成
-title: "[ストーリー] "
+title: ""
 labels: ["user-story", "enhancement"]
 assignees: ""
 reviewers: ""
