@@ -1,7 +1,14 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "types": ["vitest/globals", "testing-library/react"]
+    "types": ["vitest/globals", "@testing-library/jest-dom"]
   },
-  "include": ["tests/**/*.(spec|test).(ts|tsx)"]
+  "include": [
+    "tests/**/*.(spec|test).(ts|tsx)",
+    "next-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": ["node_modules"]
 }

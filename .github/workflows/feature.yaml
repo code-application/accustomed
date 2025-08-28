@@ -30,8 +30,12 @@ jobs:
         run: npm run lint
         continue-on-error: false
 
-      - name: Run type check
+      - name: Run type check (production code)
         run: npm run type-check
+        continue-on-error: false
+
+      - name: Run type check (test code)
+        run: npm run test:type-check
         continue-on-error: false
 
       - name: Run tests

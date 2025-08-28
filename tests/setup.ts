@@ -1,6 +1,9 @@
 import "@testing-library/jest-dom";
 import { vi } from "vitest";
 
+// Vitestのグローバル型定義を有効化
+/// <reference types="vitest/globals" />
+
 // Next.jsのrouterモック
 vi.mock("next/router", () => ({
   useRouter: () => ({

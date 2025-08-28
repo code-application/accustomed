@@ -9,6 +9,7 @@
     "lint": "next lint",
     "type-check": "tsc --noEmit",
     "build:type-check": "tsc --noEmit --project tsconfig.json",
+    "test:type-check": "tsc --noEmit --project tsconfig.test.json",
     "test": "vitest",
     "test:coverage": "vitest run --coverage"
   },
