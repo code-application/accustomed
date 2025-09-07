@@ -1,4 +1,4 @@
-import { Task } from "@/domain/task";
+import type { Task } from "@/domain/task";
 
 const STORAGE_KEY = "habit-tracker-tasks";
 
@@ -22,7 +22,7 @@ export function loadTasks(): Task[] {
       try {
         const parsed = JSON.parse(stored);
         // Dateオブジェクトを復元
-        return parsed.map((task: any) => ({
+        return parsed.map((task: Record<string, unknown>) => ({
           ...task,
           configuration: {
             ...task.configuration,
@@ -33,14 +33,16 @@ export function loadTasks(): Task[] {
               startedAt: new Date(task.configuration.duration.startedAt),
             },
           },
-          instances: task.instances.map((instance: any) => ({
-            ...instance,
-            scheduledDate: new Date(instance.scheduledDate),
-            completedDate: instance.completedDate
-              ? new Date(instance.completedDate)
-              : undefined,
-            createdAt: new Date(instance.createdAt),
-          })),
+          instances: task.instances.map(
+            (instance: Record<string, unknown>) => ({
+              ...instance,
+              scheduledDate: new Date(instance.scheduledDate),
+              completedDate: instance.completedDate
+                ? new Date(instance.completedDate)
+                : undefined,
+              createdAt: new Date(instance.createdAt),
+            })
+          ),
         }));
       } catch (error) {
         console.error("Error parsing stored tasks:", error);

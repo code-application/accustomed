@@ -1,10 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { Task, TaskConfiguration, FrequencyUnit } from "@/domain/task";
+import type { FrequencyUnit, Task, TaskConfiguration } from "@/domain/task";
 import { generateTaskConfigurationId } from "@/domain/task-domain-service";
 import { getEndOfMonthExample } from "@/shared/date-utils";
 import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import {
@@ -14,13 +21,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "../ui/dialog";
 
 /**
  * タスク追加モーダルコンポーネントのプロパティ

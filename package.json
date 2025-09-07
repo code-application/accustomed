@@ -6,7 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint && biome check .",
+    "lint:fix": "next lint --fix && biome check --write .",
+    "format": "biome format --write .",
+    "lint:md": "markdownlint-cli2 \"docs/**/*.md\" \"*.md\" \".github/**/*.md\"",
+    "lint:md:fix": "markdownlint-cli2 --fix \"docs/**/*.md\" \"*.md\" \".github/**/*.md\"",
+    "docs:check": "npm run lint:md",
+    "docs:fix": "npm run lint:md:fix",
+    "check": "biome check . && npm run lint:md",
+    "check:fix": "biome check --write . && npm run lint:md:fix"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -60,12 +68,15 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.2.3",
     "@types/node": "20.6.2",
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.15",
     "eslint": "8.49.0",
     "eslint-config-next": "13.5.1",
+    "markdownlint": "^0.38.0",
+    "markdownlint-cli2": "^0.18.1",
     "postcss": "8.4.30",
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2"

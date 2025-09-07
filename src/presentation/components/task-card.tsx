@@ -1,18 +1,18 @@
 "use client";
 
+import { Edit, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { Task } from "@/domain/task";
-import {
-  isSameDate,
-  calculateRemainingDays,
-} from "@/domain/task-domain-service";
 import { calculateStreak } from "@/domain/date-domain-service";
-import { Card, CardContent } from "../ui/card";
-import { Button } from "../ui/button";
+import type { Task } from "@/domain/task";
+import {
+  calculateRemainingDays,
+  isSameDate,
+} from "@/domain/task-domain-service";
 import { Badge } from "../ui/badge";
-import { Trash2, Edit } from "lucide-react";
-import { WeeklyProgress } from "./weekly-progress";
+import { Button } from "../ui/button";
+import { Card, CardContent } from "../ui/card";
 import { MonthlyHistory } from "./monthly-history";
+import { WeeklyProgress } from "./weekly-progress";
 
 /**
  * タスクカードコンポーネントのプロパティ
@@ -53,7 +53,9 @@ export function TaskCard({ task, onToggle, onDelete, onEdit }: TaskCardProps) {
       const completedDate =
         instance.completedDate instanceof Date
           ? instance.completedDate
-          : new Date(instance.completedDate!);
+          : instance.completedDate
+            ? new Date(instance.completedDate)
+            : new Date();
       return completedDate.toISOString().split("T")[0];
     })
     .sort();
@@ -75,10 +77,10 @@ export function TaskCard({ task, onToggle, onDelete, onEdit }: TaskCardProps) {
     task.configuration.frequency.unit === "day"
       ? "日"
       : task.configuration.frequency.unit === "week"
-      ? "週"
-      : task.configuration.frequency.unit === "month"
-      ? "月"
-      : "年"
+        ? "週"
+        : task.configuration.frequency.unit === "month"
+          ? "月"
+          : "年"
   }${task.configuration.frequency.count}回`;
 
   return (
@@ -141,17 +143,13 @@ export function TaskCard({ task, onToggle, onDelete, onEdit }: TaskCardProps) {
         {/* 週間ビューまたは月別履歴 */}
         <div className="mt-4">
           {!showMonthlyCalendar ? (
-            <>
-              <WeeklyProgress task={task} onToggle={onToggle} />
-            </>
+            <WeeklyProgress task={task} onToggle={onToggle} />
           ) : (
-            <>
-              <MonthlyHistory
-                task={task}
-                onToggle={onToggle}
-                onClose={() => setShowMonthlyCalendar(false)}
-              />
-            </>
+            <MonthlyHistory
+              task={task}
+              onToggle={onToggle}
+              onClose={() => setShowMonthlyCalendar(false)}
+            />
           )}
           {/* タスクカードのフッター */}
           <div className="flex justify-between items-center mt-3">
