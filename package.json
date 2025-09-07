@@ -13,8 +13,8 @@
     "type-check": "npm run type-check:build && npm run type-check:test",
     "type-check:build": "tsc --noEmit --project tsconfig.build.json",
     "type-check:test": "tsc --noEmit --project tsconfig.test.json",
-    "test": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test": "vitest --config tests/vitest.config.mts",
+    "test:coverage": "vitest run --coverage --config tests/vitest.config.mts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -74,7 +74,7 @@
     "@types/node": "^20.19.0",
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
-    "@vitejs/plugin-react": "^5.0.2",
+    "@vitejs/plugin-react": "4.3.3",
     "@vitest/coverage-v8": "^3.2.4",
     "autoprefixer": "10.4.15",
     "cross-env": "^10.0.0",

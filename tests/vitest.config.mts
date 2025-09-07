@@ -7,8 +7,9 @@ export default defineConfig({
   test: {
     globals: true, // expect, describe, it などをグローバルに
     environment: "jsdom",
+    // testsディレクトリにあるが、setupFilesのパスはルートから見たパスで書く
     setupFiles: "./tests/setup.ts",
-    include: ["tests/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    include: ["**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html", "lcov"],
