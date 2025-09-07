@@ -1,6 +1,7 @@
 # プロジェクト固有指示
 
 ## タスクワークフロー（必須手順）
+
 GitHubプロジェクトでタスクに取り掛かる際は、以下の順番を厳守すること：
 
 1. **Issue取得**: `gh issue list`でリモートリポジトリからissue一覧を取得
@@ -14,6 +15,7 @@ GitHubプロジェクトでタスクに取り掛かる際は、以下の順番�
 6. **完了処理**: コミット作成・プッシュ・PR作成・issue close
 
 ## 開発環境
+
 - Next.js 13.5.1 + React 18.2.0 + TypeScript
 - UI: shadcn/ui + Tailwind CSS
 - 状態管理: React Hooks
