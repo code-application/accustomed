@@ -2,14 +2,17 @@
   "name": "nextjs",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20.19.4"
+  },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "cross-env TS_NODE_PROJECT=tsconfig.build.json next dev",
+    "build": "cross-env TS_NODE_PROJECT=tsconfig.build.json next build",
     "start": "next start",
-    "lint": "next lint",
-    "type-check": "tsc --noEmit",
-    "build:type-check": "tsc --noEmit --project tsconfig.json",
-    "test:type-check": "tsc --noEmit --project tsconfig.test.json",
+    "lint": "cross-env TS_NODE_PROJECT=tsconfig.build.json next lint",
+    "type-check": "npm run type-check:build && npm run type-check:test",
+    "type-check:build": "tsc --noEmit --project tsconfig.build.json",
+    "type-check:test": "tsc --noEmit --project tsconfig.test.json",
     "test": "vitest",
     "test:coverage": "vitest run --coverage"
   },
@@ -73,6 +76,7 @@
     "@types/react-dom": "18.2.7",
     "@vitejs/plugin-react": "^5.0.2",
     "autoprefixer": "10.4.15",
+    "cross-env": "^10.0.0",
     "eslint": "8.49.0",
     "eslint-config-next": "13.5.1",
     "jsdom": "^26.1.0",

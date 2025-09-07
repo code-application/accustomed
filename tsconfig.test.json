@@ -1,14 +1,29 @@
 {
-  "extends": "./tsconfig.json",
+  // テスト用の設定
+  "extends": "./tsconfig.build.json",
   "compilerOptions": {
-    "types": ["vitest/globals", "@testing-library/jest-dom"]
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
+    "isolatedModules": false,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": [
     "tests/**/*.(spec|test).(ts|tsx)",
-    "next-env.d.ts",
+    "tests/setup.ts",
     "src/**/*.ts",
-    "src/**/*.tsx",
-    ".next/types/**/*.ts"
+    "src/**/*.tsx"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "node_modules/**/*",
+    "**/node_modules/**/*",
+    "**/coverage/**",
+    "**/.next/**",
+    "**/dist/**",
+    "vitest.config.mts"
+  ]
 }
