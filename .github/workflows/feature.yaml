@@ -1,0 +1,58 @@
+name: Feature Branch CI
+
+on:
+  push:
+    branches:
+      - feature/**
+      - main
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ">=20.19.4"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+        continue-on-error: false
+
+      - name: Run type check (production code)
+        run: npm run type-check:build
+        continue-on-error: false
+
+      - name: Run type check (test code)
+        run: npm run type-check:test
+        continue-on-error: false
+
+      - name: Run tests
+        run: npm test
+        continue-on-error: false
+
+      - name: Run test coverage
+        run: npm run test:coverage
+        continue-on-error: false
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+          fail_ci_if_error: false
+
+      - name: Build application
+        run: npm run build
+        continue-on-error: false
+
+      - name: Build type check
+        run: npm run type-check
+        continue-on-error: false

@@ -1,0 +1,28 @@
+{
+  // テスト用の設定
+  "extends": "./tsconfig.build.json",
+  "compilerOptions": {
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
+    "isolatedModules": false,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": [
+    "tests/**/*.(spec|test).(ts|tsx)",
+    "tests/setup.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "node_modules/**/*",
+    "**/node_modules/**/*",
+    "**/coverage/**",
+    "**/.next/**",
+    "**/dist/**"
+  ]
+}

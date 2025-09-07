@@ -30,7 +30,6 @@ export function loadTasks(): Task[] {
             duration: {
               ...task.configuration.duration,
               deadline: new Date(task.configuration.duration.deadline),
-              startedAt: new Date(task.configuration.duration.startedAt),
             },
           },
           instances: task.instances.map(
