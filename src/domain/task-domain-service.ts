@@ -1,15 +1,15 @@
-import {
+import { getDaysInMonth, isDateToday } from "@/shared/date-utils";
+import { calculateStreak } from "./date-domain-service";
+import type {
+  DayData,
+  MonthlyHistoryData,
   Task,
   TaskConfiguration,
   TaskInstance,
   TaskStats,
   WeeklyData,
   WeeklyDayData,
-  MonthlyHistoryData,
-  DayData,
 } from "./task";
-import { isDateToday, getDaysInMonth } from "@/shared/date-utils";
-import { calculateStreak } from "./date-domain-service";
 
 /**
  * タスク設定のIDを生成する
@@ -178,7 +178,7 @@ export function calculateNewTaskStats(tasks: Task[]): TaskStats {
               )
               .map(
                 (instance) =>
-                  instance.completedDate!.toISOString().split("T")[0]
+                  instance.completedDate?.toISOString().split("T")[0]
               )
               .sort();
             return calculateStreak(completedDates);

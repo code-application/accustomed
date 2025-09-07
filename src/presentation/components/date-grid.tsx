@@ -83,9 +83,9 @@ export function DateGrid({
       className={`grid grid-cols-7 gap-0 border border-gray-200 rounded-sm overflow-hidden ${className}`}
     >
       {/* 曜日ラベル */}
-      {weekDayLabels.map((day, index) => (
+      {weekDayLabels.map((day) => (
         <div
-          key={index}
+          key={day}
           className="text-center p-1 bg-gray-50 border-r border-gray-200 last:border-r-0"
         >
           <div className="text-xs text-gray-500 font-medium">{day}</div>
@@ -93,9 +93,9 @@ export function DateGrid({
       ))}
 
       {/* 日付ボックス */}
-      {days.map((dayData, index) => (
+      {days.map((dayData) => (
         <div
-          key={index}
+          key={dayData.date.toISOString()}
           className={`
             text-center p-1 border-r border-gray-200 last:border-r-0 border-t border-gray-200 aspect-square
             ${
@@ -106,6 +106,7 @@ export function DateGrid({
           `}
         >
           <button
+            type="button"
             onClick={() => handleDayClick(dayData)}
             disabled={!isClickable(dayData)}
             className={`

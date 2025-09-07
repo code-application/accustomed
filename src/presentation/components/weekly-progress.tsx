@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
-import { Task } from "@/domain/task";
-import { formatWeeklyData } from "@/domain/task-domain-service";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "../ui/button";
-import { DateGrid, DayData } from "./date-grid";
+import { useEffect } from "react";
+import type { Task } from "@/domain/task";
+import { formatWeeklyData } from "@/domain/task-domain-service";
 import { getWeekStart, isCurrentWeek } from "@/shared/date-utils";
+import { Button } from "../ui/button";
+import { DateGrid, type DayData } from "./date-grid";
 
 /**
  * 週の進捗を表示するコンポーネントのprops
@@ -143,6 +143,7 @@ export function WeeklyProgress({ task, onToggle }: WeeklyProgressProps) {
           </span>
           {isCurrentWeek() && (
             <button
+              type="button"
               onClick={goToCurrentWeek}
               className="text-blue-600 hover:text-blue-700 text-xs"
             >

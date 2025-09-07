@@ -1,10 +1,10 @@
 "use client";
 
-import { Task } from "@/domain/task";
+import { Calendar, CheckCircle, Target, TrendingUp } from "lucide-react";
+import type { Task } from "@/domain/task";
 import { calculateNewTaskStats } from "@/domain/task-domain-service";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Avatar, AvatarFallback } from "../ui/avatar";
-import { TrendingUp, Target, CheckCircle, Calendar } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 interface DashboardProps {
   tasks: Task[];
@@ -19,21 +19,25 @@ export function Dashboard({ tasks }: DashboardProps) {
 
   const statCards = [
     {
+      id: "today-completed",
       title: "今日の完了",
       value: `${stats.completedToday}/${stats.totalTasks}`,
       icon: CheckCircle,
     },
     {
+      id: "current-streak",
       title: "連続記録",
       value: `${stats.currentStreak}日`,
       icon: TrendingUp,
     },
     {
+      id: "completion-rate",
       title: "完了率",
       value: `${Math.round(stats.completionRate)}%`,
       icon: Target,
     },
     {
+      id: "total-completions",
       title: "総完了数",
       value: stats.totalCompletions,
       icon: Calendar,
@@ -43,8 +47,8 @@ export function Dashboard({ tasks }: DashboardProps) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {statCards.map((stat, index) => (
-          <Card key={index}>
+        {statCards.map((stat) => (
+          <Card key={stat.id}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
                 {stat.title}

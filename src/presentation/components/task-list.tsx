@@ -1,8 +1,8 @@
 "use client";
 
-import { Task } from "@/domain/task";
-import { TaskCard } from "./task-card";
+import type { Task } from "@/domain/task";
 import { Alert, AlertDescription } from "../ui/alert";
+import { TaskCard } from "./task-card";
 
 /**
  * タスク一覧コンポーネントのプロパティ
