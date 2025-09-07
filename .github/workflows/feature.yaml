@@ -28,11 +28,11 @@ jobs:
         continue-on-error: false
 
       - name: Run type check (production code)
-        run: npm run type-check
+        run: npm run type-check:build
         continue-on-error: false
 
       - name: Run type check (test code)
-        run: npm run test:type-check
+        run: npm run type-check:test
         continue-on-error: false
 
       - name: Run tests
@@ -54,5 +54,5 @@ jobs:
         continue-on-error: false
 
       - name: Build type check
-        run: npm run build:type-check
+        run: npm run type-check
         continue-on-error: false
