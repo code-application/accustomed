@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { Task } from "@/domain/task";
-import { formatMonthlyHistoryData } from "@/domain/task-domain-service";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "../ui/button";
-import { DateGrid, DayData } from "./date-grid";
+import { useState } from "react";
+import type { Task } from "@/domain/task";
+import { formatMonthlyHistoryData } from "@/domain/task-domain-service";
 import { getMonthName, isCurrentMonth } from "@/shared/date-utils";
+import { Button } from "../ui/button";
+import { DateGrid, type DayData } from "./date-grid";
 
 interface MonthlyHistoryProps {
   task: Task;
