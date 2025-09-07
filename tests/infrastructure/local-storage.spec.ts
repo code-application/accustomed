@@ -21,6 +21,7 @@ Object.defineProperty(window, "localStorage", {
   writable: true,
 });
 
+/* AI-generated */
 describe("Local Storage", () => {
   beforeEach(() => {
     vi.clearAllMocks();

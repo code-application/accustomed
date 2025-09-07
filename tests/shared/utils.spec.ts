@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { cn } from "@/shared/utils";
 
+/* AI-generated */
 describe("cn (class name utility)", () => {
   test("should merge class names", () => {
     expect(cn("class1", "class2")).toBe("class1 class2");
@@ -16,11 +17,15 @@ describe("cn (class name utility)", () => {
   });
 
   test("should handle objects", () => {
-    expect(cn("base", { class1: true, class2: false, class3: true })).toBe("base class1 class3");
+    expect(cn("base", { class1: true, class2: false, class3: true })).toBe(
+      "base class1 class3"
+    );
   });
 
   test("should handle mixed inputs", () => {
-    expect(cn("base", "class1", { class2: true }, ["class3", "class4"])).toBe("base class1 class2 class3 class4");
+    expect(cn("base", "class1", { class2: true }, ["class3", "class4"])).toBe(
+      "base class1 class2 class3 class4"
+    );
   });
 
   test("should handle empty inputs", () => {
@@ -42,14 +47,16 @@ describe("cn (class name utility)", () => {
     const isActive = true;
     const isDisabled = false;
     const size = "large";
-    
-    expect(cn(
-      "button",
-      "base-button",
-      isActive && "active",
-      isDisabled && "disabled",
-      size === "large" && "large",
-      ["primary", "rounded"]
-    )).toBe("button base-button active large primary rounded");
+
+    expect(
+      cn(
+        "button",
+        "base-button",
+        isActive && "active",
+        isDisabled && "disabled",
+        size === "large" && "large",
+        ["primary", "rounded"]
+      )
+    ).toBe("button base-button active large primary rounded");
   });
 });

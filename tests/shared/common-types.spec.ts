@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 import type { StringId, Timestamp, ApiResponse } from "@/shared/common-types";
 
+/* AI-generated */
 describe("Common Types", () => {
   describe("StringId", () => {
     test("should accept string values", () => {
@@ -18,7 +19,7 @@ describe("Common Types", () => {
         "id-with-特殊文字-漢字",
       ];
 
-      ids.forEach(id => {
+      ids.forEach((id) => {
         expect(typeof id).toBe("string");
       });
     });
@@ -38,7 +39,7 @@ describe("Common Types", () => {
         9999999999999, // Far future
       ];
 
-      timestamps.forEach(timestamp => {
+      timestamps.forEach((timestamp) => {
         expect(typeof timestamp).toBe("number");
         expect(Number.isInteger(timestamp)).toBe(true);
       });

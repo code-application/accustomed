@@ -19,6 +19,7 @@ const createMockTask = (id: string, content: string): Task => ({
   instances: [],
 });
 
+/* AI-generated */
 describe("TaskList", () => {
   test("should render empty task list message", () => {
     render(

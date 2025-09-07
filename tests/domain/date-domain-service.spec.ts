@@ -5,6 +5,7 @@ import {
   isCurrentWeek,
 } from "@/domain/date-domain-service";
 
+/* AI-generated */
 // FIXME: 連続日数の計算の仕様が曖昧なので、一時的にスキップする。
 // まずテスト環境を構築することを優先する。
 describe.skip("Date Domain Service", () => {

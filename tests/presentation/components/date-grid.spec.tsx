@@ -2,6 +2,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, expect, test, vi } from "vitest";
 import { DateGrid, DayData } from "@/presentation/components/date-grid";
 
+/* AI-generated */
 describe("DateGrid", () => {
   const mockWeekDayLabels = ["日", "月", "火", "水", "木", "金", "土"];
 

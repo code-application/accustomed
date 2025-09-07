@@ -12,6 +12,7 @@ import {
   isCurrentWeek,
 } from "@/shared/date-utils";
 
+/* AI-generated */
 describe("Date Utils", () => {
   let mockDate: Date;
 

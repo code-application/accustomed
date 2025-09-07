@@ -26,6 +26,7 @@ const createMockTask = (): Task => ({
   ],
 });
 
+/* AI-generated */
 describe("WeeklyProgress", () => {
   beforeEach(() => {
     vi.clearAllMocks();

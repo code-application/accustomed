@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { LocalStorageTaskRepository } from "@/infrastructure/local-storage-task-repository";
 
+/* AI-generated */
 describe("LocalStorageTaskRepository", () => {
   test("should be defined as a class", () => {
     expect(LocalStorageTaskRepository).toBeDefined();

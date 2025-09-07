@@ -13,6 +13,7 @@ const defaultProps = {
   onSubmit: mockOnSubmit,
 };
 
+/* AI-generated */
 describe("AddTaskModal", () => {
   beforeEach(() => {
     vi.clearAllMocks();

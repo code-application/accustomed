@@ -14,6 +14,7 @@ import {
   DayData,
 } from "@/domain/task";
 
+/* AI-generated */
 describe("Task Model", () => {
   describe("TaskConfiguration", () => {
     test("should have correct structure", () => {

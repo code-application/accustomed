@@ -31,6 +31,7 @@ const createMockTask = (isCompleted = false): Task => {
   };
 };
 
+/* AI-generated */
 describe("TaskCard", () => {
   beforeEach(() => {
     vi.clearAllMocks();

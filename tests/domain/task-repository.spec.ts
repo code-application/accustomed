@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+/* AI-generated */
 describe("TaskRepository", () => {
   test("should be defined as interface", () => {
     // TypeScriptのインターフェースは型として定義されている
